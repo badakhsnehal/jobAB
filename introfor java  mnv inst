@@ -1,0 +1,30 @@
+create a new jon select pipline
+
+2: Configure the Pipeline
+Scroll down to the Pipeline section.
+Set Definition to “Pipeline script from SCM”.
+Choose SCM as Git.
+In Repository URL, enter: use 
+
+Branch, enter:main
+
+
+In Script Path, enter:jenkinsfile
+
+-----------------------------------------
+Add Maven in Jenkins
+Go to Jenkins Dashboard → Manage Jenkins → Global Tool Configuration.
+
+Scroll to Maven section.
+click Add Maven.
+
+Set:
+Name: maven 3.9.10
+
+In the same Global Tool Configuration page, scroll to JDK section.
+
+Click Add JDK.
+
+Set:Name: openjdk 21.0.7
+
+enter same version everywhere
