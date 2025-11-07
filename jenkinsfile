@@ -1,0 +1,49 @@
+pipeline {
+    agent any  // Run on any available agent
+
+    tools {
+        maven 'maven 3.9.10'  // Make sure this matches your Jenkins Global Tool Configuration
+        jdk 'openjdk 21.0.7'  // Make sure this matches your Jenkins Global Tool Configuration
+    }
+
+    stages {
+        stage('Fetch Code') {
+            steps {
+                git branch: 'main', url: 'https://github.com/hkhcoder/vprofile-project.git'
+            }
+        }
+
+        stage('Unit Test') {
+            steps {
+                sh 'mvn test'  // Compile and run all unit tests
+            }
+        }
+
+        stage('Build Code') {
+            steps {
+                sh 'mvn package -DskipTests'  // Package the application without running tests again
+            }
+        }
+
+        stage('Archive Artifact') {
+            steps {
+                archiveArtifacts artifacts: '**/*.war', allowEmptyArchive: true
+            }
+        }
+
+        stage('Deploy to Staging') {
+            when {
+                expression { currentBuild.currentResult == 'SUCCESS' } // Only if all previous stages succeeded
+            }
+            steps {
+                echo 'Deploying artifact to staging server.'
+            }
+        }
+    }
+
+    post {
+        failure {
+            sh 'echo "Build failed. Notifying the development team."' // Run on failure
+        }
+    }
+}
