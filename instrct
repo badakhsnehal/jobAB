@@ -1,0 +1,79 @@
+JOBA
+Freestyle project → Click OK
+
+Check This project is parameterized
+Add String Parameter:
+Name: GIT_BRANCH
+Default: main
+
+Add Choice Parameter:
+Name: BUILD_ENV
+Choices: development, staging
+Source Code Management → Git
+
+Repository URL: https://github.com/badakhsnehal/sales_market.git
+Branch Specifier: */${GIT_BRANCH}
+Build → Invoke top-level Maven targets
+
+( OPtional)POM: pom.xml
+
+Goals:
+clean package
+
+
+Post-build Actions → Archive the artifacts
+Artifacts to archive:
+
+**/target/*.jar
+----------
+Trigger Job B Automatically
+
+Click Add post-build action → Build other projects
+
+Project to build:
+
+vprofile-Deploy == Job A
+
+
+Trigger only if build is stable
+
+8️⃣ Save Job A ✅
+----------------------------------------------------------------------
+create Job B same at is
+Add parameters
+
+"Check This project is parameterized"
+
+Add:
+
+-a) String Parameter
+
+Name: BUILD_ID
+Description: Build number of the artifact to deploy
+
+b) Choice Parameter
+Name: BUILD_ENV
+
+Choices:
+development
+staging
+production
+
+Copy Artifact from Job A
+
+Scroll down → Add build step → Copy artifacts from another project [need Copy artifacts ]
+
+Project name:job A
+
+Which build:Select “Specified by build parameter”
+
+Parameter name:BUILD_ID
+Artifacts to copy:**/target/*.war
+
+Target directory:
+/tmp/deploy-${BUILD_ENV}/
+
+ADD SHElL
+
+In Job A (Build job):
+Under Post-build Actions → Build other projects, ensure: JOB B
