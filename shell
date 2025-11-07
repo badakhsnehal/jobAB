@@ -1,0 +1,33 @@
+for WAR
+
+echo "Deploying build ${BUILD_ID} to ${BUILD_ENV} environment..."
+mkdir -p /tmp/deploy-${BUILD_ENV}
+cp target/*.war /tmp/deploy-${BUILD_ENV}/
+echo "Deployment completed successfully!"
+----------------------------------------------------------------------\
+for JAR
+#!/bin/bash
+
+echo "Deploying build ${BUILD_ID} to ${BUILD_ENV} environment..."
+
+# Create deployment folder if it doesn't exist
+mkdir -p /tmp/deploy-${BUILD_ENV}
+
+# Copy the JAR artifact from Job A's workspace
+cp target/*.jar /tmp/deploy-${BUILD_ENV}/
+
+echo "Deployment completed successfully!"
+
+for BOTH
+----------------------------------------------------------------------
+echo "Deploying build ${BUILD_ID} to ${BUILD_ENV} environment..."
+mkdir -p /tmp/deploy-${BUILD_ENV}
+
+# Copy artifact if exists
+if compgen -G "target/*.jar" > /dev/null; then
+    cp target/*.jar /tmp/deploy-${BUILD_ENV}/
+elif compgen -G "target/*.war" > /dev/null; then
+    cp target/*.war /tmp/deploy-${BUILD_ENV}/
+fi
+
+echo "Deployment completed successfully!"
